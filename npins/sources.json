@@ -1,0 +1,47 @@
+{
+  "pins": {
+    "gomod2nix": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "gomod2nix"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "release_prefix": null,
+      "submodules": false,
+      "version": "v1.6.0",
+      "revision": "5d387097aa716f35dd99d848dc26d8d5b62a104c",
+      "url": "https://api.github.com/repos/nix-community/gomod2nix/tarball/v1.6.0",
+      "hash": "1mdwyjz43nnh7gfq4rc54kql6fy65hw17w0p4gwklnfqciwrkax2"
+    },
+    "nilla": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nilla-nix",
+        "repo": "nilla"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "6747fe62879d7d15c96808bc370a52941287772c",
+      "url": "https://github.com/nilla-nix/nilla/archive/6747fe62879d7d15c96808bc370a52941287772c.tar.gz",
+      "hash": "0sg9chk7y8h8sh8647vi0d2liqxa0vnidpd3acs763p6alxnf23y"
+    },
+    "nixpkgs": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nixos",
+        "repo": "nixpkgs"
+      },
+      "branch": "nixos-unstable",
+      "submodules": false,
+      "revision": "52faf482a3889b7619003c0daec593a1912fddc1",
+      "url": "https://github.com/nixos/nixpkgs/archive/52faf482a3889b7619003c0daec593a1912fddc1.tar.gz",
+      "hash": "04glsr88dhs9w61nyfpn17dphkmn2kssaf603ndhp7sizcppl6ga"
+    }
+  },
+  "version": 5
+}
