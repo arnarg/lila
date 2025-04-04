@@ -5,6 +5,7 @@ import (
 	gos "os"
 
 	"github.com/arnarg/lila/cmd/lila/build"
+	"github.com/arnarg/lila/cmd/lila/home"
 	"github.com/arnarg/lila/cmd/lila/os"
 	"github.com/arnarg/lila/cmd/lila/shell"
 	"github.com/urfave/cli/v2"
@@ -26,6 +27,7 @@ func main() {
 		Commands: cli.Commands{
 			build.Command,
 			os.Command,
+			home.Command,
 			shell.Command,
 		},
 	}
