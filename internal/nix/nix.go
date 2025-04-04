@@ -125,17 +125,8 @@ func (c NixCommand) runWithReporter(ctx context.Context, cmd string, args []stri
 		cancel()
 	}
 
-	// Wait for nix command and decoder
-	var cerr error
-	if cerr = nixc.Wait(); cerr != nil {
-		if cerr == context.Canceled {
-			cerr = nil
-		} else {
-			if cerr.Error() == "signal: killed" {
-				cerr = nil
-			}
-		}
-	}
+	// Wait for nix command
+	cerr := nixc.Wait()
 
 	// Set error
 	if perr != nil {

@@ -3,7 +3,6 @@ package build
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/arnarg/lila/internal/nix"
 	"github.com/arnarg/lila/internal/tui"
@@ -62,16 +61,13 @@ func run(ctx *cli.Context) error {
 		nargs = append(nargs, "--out-link", ctx.String("out-link"))
 	}
 
-	// Create a build TUI reporter
-	reporter := tui.NewBuildReporter(ctx.Bool("verbose"))
-
 	// Run nix build
 	out, err := nix.Command("build").
 		Args(nargs).
-		Reporter(reporter).
+		Reporter(tui.NewBuildReporter(ctx.Bool("verbose"))).
 		Run(context.Background())
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	// Print out path, if wanted

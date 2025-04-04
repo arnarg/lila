@@ -3,19 +3,23 @@
   buildGoApplication,
   nvd,
   makeWrapper,
-}:
-buildGoApplication {
-  name = "lila";
+}: let
+  version = "0.0.0";
+in
+  buildGoApplication {
+    inherit version;
+    pname = "lila";
 
-  src = lib.cleanSource ./.;
+    src = lib.cleanSource ./.;
 
-  modules = ./gomod2nix.toml;
+    modules = ./gomod2nix.toml;
 
-  subPackages = ["cmd/lila"];
+    subPackages = ["cmd/lila"];
+    ldflags = ["-X main.version=${version}"];
 
-  nativeBuildInputs = [makeWrapper];
+    nativeBuildInputs = [makeWrapper];
 
-  postInstall = ''
-    wrapProgram $out/bin/lila --prefix PATH : ${lib.makeBinPath [nvd]}
-  '';
-}
+    postInstall = ''
+      wrapProgram $out/bin/lila --prefix PATH : ${lib.makeBinPath [nvd]}
+    '';
+  }

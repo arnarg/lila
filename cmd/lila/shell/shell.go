@@ -3,9 +3,9 @@ package shell
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
+	"syscall"
 
 	"github.com/arnarg/lila/internal/nix"
 	"github.com/arnarg/lila/internal/tui"
@@ -52,47 +52,30 @@ func run(ctx *cli.Context) error {
 		"-f", "nilla.nix", attr, "--no-link",
 	}
 
-	// Create a build TUI reporter
-	reporter := tui.NewBuildReporter(ctx.Bool("verbose"))
-
 	// Run nix build
 	_, err = nix.Command("build").
 		Args(nargs).
-		Reporter(reporter).
+		Reporter(tui.NewBuildReporter(ctx.Bool("verbose"))).
 		Run(context.Background())
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	// Create nix-shell command
-	sargs := []string{
-		"nilla.nix",
-		"--attr", attr,
-		"--quiet",
-	}
+	// Create nix-shell arg list
+	sargs := []string{"nix-shell", "nilla.nix", "--attr", attr, "--quiet"}
 
 	if ctx.String("command") != "" {
 		sargs = append(sargs, "--command", ctx.String("command"))
 	}
 
-	shell := exec.Command("nix-shell", sargs...)
+	// Copy current environment with NIX_SOURCED_VAR set
+	senv := append(os.Environ(), fmt.Sprintf("%s=1", NIX_SOURCED_VAR))
 
-	// Inherit environment
-	shell.Env = append(os.Environ(), fmt.Sprintf("%s=1", NIX_SOURCED_VAR))
-
-	// Plug pipes
-	shell.Stdin = os.Stdin
-	shell.Stdout = os.Stdout
-	shell.Stderr = os.Stderr
-
-	// Run nix-shell
-	if err := shell.Run(); err != nil {
-		if eerr, ok := err.(*exec.ExitError); ok {
-			os.Exit(eerr.ExitCode())
-		} else {
-			return err
-		}
+	// Find full path to nix-shell
+	spath, err := exec.LookPath("nix-shell")
+	if err != nil {
+		return err
 	}
 
-	return nil
+	return syscall.Exec(spath, sargs, senv)
 }
