@@ -175,8 +175,9 @@ func run(ctx *cli.Context, sc subCmd) error {
 		switchc.Stderr = os.Stderr
 		switchc.Stdout = os.Stdout
 
-		if err := switchc.Run(); err != nil {
-			// TODO: maybe we should continue during switch
+		// This error should be ignored during switch so that
+		// it can continue onto setting up the bootloader below
+		if err := switchc.Run(); err != nil && sc != subCmdSwitch {
 			return err
 		}
 	}
